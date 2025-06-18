@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Confetti from 'react-confetti';
-import { Share2 } from 'lucide-react';
+import { Share2, Info } from 'lucide-react';
 
 const PrankReveal = () => {
   const [showConfetti, setShowConfetti] = useState(true);
@@ -117,6 +117,26 @@ const PrankReveal = () => {
             <span style={{ animationDelay: '0.4s' }}>😆</span>
             <span style={{ animationDelay: '0.6s' }}>😄</span>
             <span style={{ animationDelay: '0.8s' }}>😁</span>
+          </div>
+
+          {/* Important Information Section */}
+          <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg">
+            <div className="flex items-start">
+              <Info className="h-5 w-5 text-blue-400 mt-0.5 mr-3 flex-shrink-0" />
+              <div className="text-left">
+                <h3 className="text-lg font-semibold text-blue-800 mb-2">
+                  📢 Important Information
+                </h3>
+                <p className="text-blue-700 text-sm leading-relaxed">
+                  <strong>1 Month Intensive Training Program</strong> - Registration starting from next week! 
+                  Premium modules including Java, Python, Web Development, and Cloud Computing. 
+                  Limited seats available. Certification guaranteed! 🎓
+                </p>
+                <p className="text-blue-600 text-xs mt-2 italic">
+                  *Bas yeh sab fake tha! 😜
+                </p>
+              </div>
+            </div>
           </div>
 
           <div className="space-y-4 pt-6">
