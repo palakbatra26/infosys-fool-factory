@@ -3,10 +3,12 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Confetti from 'react-confetti';
+import { Share2 } from 'lucide-react';
 
 const PrankReveal = () => {
   const [showConfetti, setShowConfetti] = useState(true);
   const [animationPhase, setAnimationPhase] = useState(0);
+  const [shareStatus, setShareStatus] = useState('');
 
   useEffect(() => {
     const timer1 = setTimeout(() => setAnimationPhase(1), 1000);
@@ -19,6 +21,40 @@ const PrankReveal = () => {
       clearTimeout(timer3);
     };
   }, []);
+
+  const handleShare = async () => {
+    const shareData = {
+      title: 'Infosys Training Prank! 😂',
+      text: 'Yeh dekho kaisa ullu bana diya! Training ka wait kar rahe the? 🤣',
+      url: window.location.href
+    };
+
+    try {
+      // Check if Web Share API is supported and available
+      if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+        await navigator.share(shareData);
+        setShareStatus('Share kiya gaya! 🎉');
+      } else {
+        // Fallback to clipboard
+        await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
+        setShareStatus('Link copy ho gayi! WhatsApp pe send karo! 📱');
+      }
+    } catch (error) {
+      console.log('Share error:', error);
+      try {
+        // Fallback to clipboard if share fails
+        await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
+        setShareStatus('Link copy ho gayi! Ab doston ko bhejo! 😄');
+      } catch (clipboardError) {
+        console.log('Clipboard error:', clipboardError);
+        // Final fallback - show link to copy manually
+        setShareStatus('Link manually copy karo: ' + window.location.href);
+      }
+    }
+
+    // Clear status after 3 seconds
+    setTimeout(() => setShareStatus(''), 3000);
+  };
 
   const messages = [
     "😂 ULLU BANA DIYA! 😂",
@@ -92,6 +128,12 @@ const PrankReveal = () => {
             </p>
           </div>
 
+          {shareStatus && (
+            <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded font-medium">
+              {shareStatus}
+            </div>
+          )}
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               onClick={() => window.location.reload()} 
@@ -101,20 +143,10 @@ const PrankReveal = () => {
             </Button>
             <Button 
               variant="outline"
-              onClick={() => {
-                if (navigator.share) {
-                  navigator.share({
-                    title: 'Infosys Training Prank!',
-                    text: 'Yeh dekho kaisa ullu bana diya! 😂',
-                    url: window.location.href
-                  });
-                } else {
-                  navigator.clipboard.writeText(window.location.href);
-                  alert('Link copied! Ab doston ko bhejo! 😄');
-                }
-              }}
-              className="border-2 border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white font-bold py-3 px-6 rounded-full transform hover:scale-105 transition-all duration-200"
+              onClick={handleShare}
+              className="border-2 border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white font-bold py-3 px-6 rounded-full transform hover:scale-105 transition-all duration-200 flex items-center gap-2"
             >
+              <Share2 size={20} />
               📤 Share Karo
             </Button>
           </div>
